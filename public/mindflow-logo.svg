@@ -1,0 +1,44 @@
+<svg width="500" height="250" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9b87f5" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.25" />
+    </linearGradient>
+    
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9b87f5" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Background shape with softer corners -->
+  <rect x="10" y="10" width="480" height="230" rx="25" fill="url(#bgGradient)" />
+  
+  <!-- Enhanced mind nodes with better positioning and sizes -->
+  <circle cx="150" cy="125" r="65" fill="#9b87f5" opacity="0.9" filter="url(#glow)" />
+  <circle cx="270" cy="90" r="35" fill="#67C9BB" opacity="0.85" filter="url(#glow)" />
+  <circle cx="310" cy="170" r="45" fill="#FF9473" opacity="0.85" filter="url(#glow)" />
+  <circle cx="375" cy="85" r="30" fill="#FFD700" opacity="0.85" filter="url(#glow)" />
+  <circle cx="390" cy="150" r="25" fill="#FF66B3" opacity="0.85" filter="url(#glow)" />
+  
+  <!-- Enhanced connection lines with better positioning and visual appeal -->
+  <line x1="150" y1="125" x2="270" y2="90" stroke="#9b87f5" stroke-width="4" opacity="0.7" />
+  <line x1="150" y1="125" x2="310" y2="170" stroke="#9b87f5" stroke-width="4" opacity="0.7" />
+  <line x1="270" y1="90" x2="375" y2="85" stroke="#67C9BB" stroke-width="3" opacity="0.7" />
+  <line x1="310" y1="170" x2="390" y2="150" stroke="#FF9473" stroke-width="3" opacity="0.7" />
+  
+  <!-- Logo text with enhanced styling -->
+  <text x="250" y="215" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="url(#textGradient)" filter="url(#glow)">MindFlow</text>
+  
+  <!-- Spark elements for visual interest -->
+  <circle cx="200" cy="65" r="4" fill="white" opacity="0.9" />
+  <circle cx="220" cy="45" r="2" fill="white" opacity="0.7" />
+  <circle cx="350" cy="45" r="3" fill="white" opacity="0.8" />
+  <circle cx="385" cy="205" r="2" fill="white" opacity="0.7" />
+</svg> 
