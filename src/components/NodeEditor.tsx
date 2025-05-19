@@ -229,6 +229,13 @@ const NodeEditor = () => {
 
   // Add effect to track dark mode changes
   useEffect(() => {
+    // Set dark mode as default on initial load
+    if (!document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    setIsDarkMode(true);
+    
     const observer = new MutationObserver(() => {
       setIsDarkMode(document.documentElement.classList.contains('dark'));
     });

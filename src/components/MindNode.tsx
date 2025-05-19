@@ -64,9 +64,7 @@ const MindNode = memo(({ id, data, isConnectable }: MindNodeProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [isDarkMode, setIsDarkMode] = useState(() => 
-    document.documentElement.classList.contains('dark')
-  );
+  const [isDarkMode, setIsDarkMode] = useState(true);
   
   const isSelected = id === selectedNodeId;
   const isRoot = id === 'root';
@@ -78,6 +76,13 @@ const MindNode = memo(({ id, data, isConnectable }: MindNodeProps) => {
   
   // Track dark mode changes
   useEffect(() => {
+    // Set dark mode as default on initial load
+    if (!document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    setIsDarkMode(true);
+    
     const observer = new MutationObserver(() => {
       setIsDarkMode(document.documentElement.classList.contains('dark'));
     });

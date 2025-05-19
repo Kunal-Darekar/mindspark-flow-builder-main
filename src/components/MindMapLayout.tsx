@@ -62,10 +62,10 @@ const MindMapLayout = () => {
       // Clean up
       if (viewportMeta) {
         viewportMeta.content = 'width=device-width, initial-scale=1.0';
-      }
+    }
     };
   }, []);
-
+  
   return (
     <div className={`min-h-screen relative ${darkMode ? 'dark bg-gray-900' : 'bg-white'} overflow-hidden`}>
       {/* Animated background elements */}
@@ -90,7 +90,7 @@ const MindMapLayout = () => {
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         )}
-
+        
         {/* Back to Home Button */}
         <div className="fixed top-4 left-4 z-50">
           <button

@@ -69,7 +69,7 @@ const MindMapControls = () => {
   } = useMindMapStore();
   
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [showTips, setShowTips] = useState(false);
   const isMobile = useIsMobile();
   const [showExportOptions, setShowExportOptions] = useState(false);
@@ -82,8 +82,12 @@ const MindMapControls = () => {
   
   // Check dark mode on mount and subscribe to changes
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    setDarkMode(isDarkMode);
+    // Set dark mode as default on initial load
+    if (!document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    setDarkMode(true);
     
     // Create a mutation observer to detect class changes on the html element
     const observer = new MutationObserver(() => {
