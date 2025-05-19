@@ -38,6 +38,25 @@ const colorOptions = [
   '#A4D4AE', // Mint
   '#FF5252', // Red
   '#66D9EF', // Cyan
+  '#845EC2', // Deep Purple
+  '#4EADEA', // Sky Blue
+  '#2C73D2', // Royal Blue
+  '#008F7A', // Emerald
+  '#C34A36', // Terra Cotta
+  '#FF6F91', // Salmon Pink
+];
+
+// Enhanced animation options
+const animationOptions = [
+  { id: 'pulse', name: 'Pulse', description: 'Gentle pulsing effect' },
+  { id: 'float', name: 'Float', description: 'Subtle floating motion' },
+  { id: 'glow', name: 'Glow', description: 'Soft glowing effect' },
+  { id: 'bounce', name: 'Bounce', description: 'Springy bounce effect' },
+  { id: 'shimmer', name: 'Shimmer', description: 'Elegant shimmer animation' },
+  { id: 'ripple', name: 'Ripple', description: 'Expanding ripple effect' },
+  { id: 'shake', name: 'Shake', description: 'Attention-grabbing shake' },
+  { id: 'slide', name: 'Slide', description: 'Smooth sliding motion' },
+  { id: 'none', name: 'None', description: 'No animation effect' }
 ];
 
 // Add these light mode specific classes
@@ -271,17 +290,10 @@ const NodeEditor = () => {
   
   if (!selectedNode) return null;
   
-  const animationOptions = [
-    { id: 'pulse', name: 'Pulse' },
-    { id: 'float', name: 'Float' },
-    { id: 'glow', name: 'Glow' },
-    { id: 'none', name: 'None' }
-  ];
-  
   return (
     <Panel 
       position="top-right" 
-      className={`glass backdrop-blur-xl rounded-xl p-5 min-w-[320px] animate-slide-down 
+      className={`glass backdrop-blur-xl rounded-xl p-4 min-w-[280px] max-w-[300px] animate-slide-down 
         ${isDarkMode ? 'shadow-neon border-white/20 bg-gray-900/80' : 'border border-gray-200 shadow-lg bg-white/90 light-mode-shadow'}
         ${isMobile ? 'w-[95%] max-w-md mx-auto mb-4' : ''}
       `}
@@ -300,8 +312,8 @@ const NodeEditor = () => {
       }
       ref={panelRef}
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 relative max-h-[80vh]">
-        <div className="overflow-y-auto max-h-[calc(80vh-80px)] flex flex-col gap-4 hide-scrollbar pr-2">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 relative max-h-[70vh]">
+        <div className="overflow-y-auto max-h-[calc(70vh-80px)] flex flex-col gap-3 hide-scrollbar pr-2">
           <div 
             className={`flex items-center justify-between border-b ${isDarkMode ? 'border-white/10' : 'border-gray-300'} pb-3 ${!isMobile ? 'cursor-grab active:cursor-grabbing' : ''} sticky top-0 z-10 bg-inherit`}
             onMouseDown={!isMobile ? handleDragStart : undefined}
@@ -318,8 +330,8 @@ const NodeEditor = () => {
             style={{ touchAction: !isMobile ? 'none' : undefined }}
           >
             <div className="flex items-center gap-2">
-              <h3 className={`font-semibold ${isDarkMode ? 'text-white text-neon' : 'text-gray-800'} flex items-center gap-2`}>
-                <Edit3 className={`w-4 h-4 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`} />
+              <h3 className={`font-semibold text-sm ${isDarkMode ? 'text-white text-neon' : 'text-gray-800'} flex items-center gap-1.5`}>
+                <Edit3 className={`w-3.5 h-3.5 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`} />
                 Edit Node
               </h3>
               <div className="relative">
@@ -368,13 +380,13 @@ const NodeEditor = () => {
               <PaintBucket className={`w-3.5 h-3.5 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`} />
               Color
             </label>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {colorOptions.map(color => (
                 <button
                   key={color}
                   type="button"
                   onClick={() => setNodeColor(color)}
-                  className={`w-8 h-8 rounded-full transition-all duration-300 flex items-center justify-center ${
+                  className={`w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center ${
                     nodeColor === color 
                       ? isDarkMode
                         ? 'ring-2 ring-offset-2 ring-white/70 scale-110 shadow-neon' 
@@ -394,7 +406,7 @@ const NodeEditor = () => {
                   aria-label={`Select color ${color}`}
                   aria-pressed={nodeColor === color}
                 >
-                  {nodeColor === color && <Check className="w-4 h-4 text-white drop-shadow-sm" />}
+                  {nodeColor === color && <Check className="w-3 h-3 text-white drop-shadow-sm" />}
                 </button>
               ))}
             </div>
@@ -480,10 +492,10 @@ const NodeEditor = () => {
               }`}
             >
               <span className="flex items-center gap-1.5">
-                <Sparkles className={`w-4 h-4 ${isDarkMode ? 'text-purple-400' : 'text-purple-500'}`} />
+                <Sparkles className={`w-3.5 h-3.5 ${isDarkMode ? 'text-purple-400' : 'text-purple-500'}`} />
                 Advanced Options
               </span>
-              {isAdvancedOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              {isAdvancedOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
             
             {isAdvancedOpen && (
@@ -493,13 +505,14 @@ const NodeEditor = () => {
                     <Sparkles className={`w-3.5 h-3.5 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`} />
                     Animation
                   </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {animationOptions.map(option => (
                     <button
                       key={option.id}
                       type="button"
                       onClick={() => setAnimationType(option.id)}
-                        className={`px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200 ${
+                      title={option.description}
+                      className={`px-3 py-2 rounded text-xs font-medium transition-all duration-200 flex flex-col items-center gap-1 relative overflow-hidden ${
                         animationType === option.id
                             ? isDarkMode
                               ? 'bg-purple-500/40 text-white border border-purple-500/40' 
@@ -509,7 +522,13 @@ const NodeEditor = () => {
                               : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
                         }`}
                       >
-                        {option.name}
+                        <span>{option.name}</span>
+                        {option.id !== 'none' && (
+                          <div className={`w-6 h-6 rounded-full bg-current opacity-20 animate-${option.id} mt-1`}></div>
+                        )}
+                        {animationType === option.id && (
+                          <div className="absolute inset-0 bg-current opacity-5"></div>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -734,14 +753,14 @@ const NodeEditor = () => {
         </div>
         
         {/* Action Buttons - Always visible at bottom */}
-        <div className={`flex justify-between sticky bottom-0 left-0 right-0 pt-4 mt-4 border-t z-20 ${
-          isDarkMode ? 'border-white/10 bg-gray-900/95' : 'border-gray-200 bg-white/95'
-        } backdrop-blur-md`}>
+          <div className={`flex justify-between sticky bottom-0 left-0 right-0 pt-3 mt-3 border-t z-20 ${
+            isDarkMode ? 'border-white/10 bg-gray-900/95' : 'border-gray-200 bg-white/95'
+          } backdrop-blur-md`}>
           <button
             type="button"
             onClick={handleDeleteNode}
             disabled={selectedNodeId === 'root'}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               selectedNodeId === 'root'
                 ? isDarkMode
                   ? 'bg-white/5 text-white/30 cursor-not-allowed' 
@@ -757,7 +776,7 @@ const NodeEditor = () => {
           
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center gap-2"
+            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center gap-1.5"
           >
             <Check className="w-4 h-4" />
             <span className="text-sm font-medium">Save Changes</span>

@@ -2,6 +2,103 @@ import { MindMapTemplate } from '@/types/mindmap';
 import { nanoid } from 'nanoid';
 
 export const mindMapTemplates: MindMapTemplate[] = [
+  // Enterprise Strategic Planning Template
+  {
+    id: 'strategic-planning',
+    name: 'Strategic Planning',
+    description: 'Enterprise framework for strategic planning and execution tracking.',
+    tags: ['Business', 'Enterprise', 'Strategy'],
+    nodes: [
+      {
+        id: 'root',
+        type: 'root',
+        data: {
+          label: 'Strategic Planning',
+          expanded: true,
+          color: '#2C73D2',
+          animation: 'glow',
+          notes: 'Company-wide strategic planning framework'
+        },
+        position: { x: 0, y: 0 },
+      },
+      {
+        id: 'vision',
+        type: 'child',
+        data: {
+          label: 'Vision & Mission',
+          expanded: true,
+          color: '#4EADEA',
+          animation: 'pulse',
+          priority: 'high'
+        },
+        parentId: 'root',
+        position: { x: 250, y: -150 },
+      },
+      {
+        id: 'goals',
+        type: 'child',
+        data: {
+          label: 'Strategic Goals',
+          expanded: true,
+          color: '#845EC2',
+          animation: 'float'
+        },
+        parentId: 'root',
+        position: { x: 250, y: 0 },
+      },
+      {
+        id: 'objectives',
+        type: 'child',
+        data: {
+          label: 'Key Objectives',
+          expanded: true,
+          color: '#FF6F91',
+          tags: ['quarterly', 'measurable', 'aligned']
+        },
+        parentId: 'goals',
+        position: { x: 450, y: 0 },
+      },
+      {
+        id: 'initiatives',
+        type: 'child',
+        data: {
+          label: 'Strategic Initiatives',
+          expanded: true,
+          color: '#008F7A',
+          animation: 'shimmer'
+        },
+        parentId: 'root',
+        position: { x: 250, y: 150 },
+      },
+      {
+        id: 'resources',
+        type: 'child',
+        data: {
+          label: 'Resource Allocation',
+          expanded: true,
+          color: '#C34A36',
+          priority: 'medium'
+        },
+        parentId: 'initiatives',
+        position: { x: 450, y: 150 },
+      },
+      {
+        id: 'metrics',
+        type: 'child',
+        data: {
+          label: 'Success Metrics',
+          expanded: true,
+          color: '#67C9BB',
+          animation: 'ripple',
+          notes: 'KPIs to measure success across all strategic initiatives'
+        },
+        parentId: 'root',
+        position: { x: 250, y: 300 },
+      }
+    ],
+    edges: [],
+    previewImage: 'https://placehold.co/100x100/2C73D2/FFF?text=Strategy'
+  },
   {
     id: 'project-planning',
     name: 'Project Planning',

@@ -150,6 +150,26 @@ const MindNode = memo(({ id, data, isConnectable }: MindNodeProps) => {
   };
   
   const textColor = getTextColor();
+
+  // Enterprise-level visualization enhancements
+  const getAnimationStyles = () => {
+    if (animation === 'none' || isSelected) return {};
+    
+    switch(animation) {
+      case 'shimmer':
+        return {
+          background: `linear-gradient(90deg, ${adjustColor(nodeColor, -15)} 0%, ${nodeColor} 25%, ${adjustColor(nodeColor, 15)} 50%, ${nodeColor} 75%, ${adjustColor(nodeColor, -15)} 100%)`,
+          backgroundSize: '200% 100%'
+        } as React.CSSProperties;
+      case 'ripple':
+        return {
+          position: 'relative' as const,
+          overflow: 'hidden' as const
+        };
+      default:
+        return {};
+    }
+  };
   
   return (
     <div 
@@ -159,7 +179,7 @@ const MindNode = memo(({ id, data, isConnectable }: MindNodeProps) => {
         ${animationClass}`}
       style={{ 
         background: isHovered
-          ? `linear-gradient(${gradientDegree}deg, ${adjustColor(nodeColor, -15)} 0%, ${nodeColor} 50%, ${adjustColor(nodeColor, gradientLight)} 100%)`
+          ? `linear-gradient(${gradientDegree}deg, ${adjustColor(nodeColor, -15)} 0%, ${nodeColor} 50%, ${adjustColor(nodeColor, 15)} 100%)`
           : `linear-gradient(135deg, ${adjustColor(nodeColor, -10)} 0%, ${nodeColor} 50%, ${adjustColor(nodeColor, 10)} 100%)`,
         color: textColor,
         borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
@@ -167,7 +187,8 @@ const MindNode = memo(({ id, data, isConnectable }: MindNodeProps) => {
           ? `0 0 20px ${adjustColor(nodeColor, -20)}90, 0 0 35px ${adjustColor(nodeColor, -20)}40` 
           : isHovered
             ? `0 0 15px ${adjustColor(nodeColor, -20)}60, 0 0 25px ${adjustColor(nodeColor, -20)}30`
-            : `0 0 8px ${adjustColor(nodeColor, -20)}40`
+            : `0 0 8px ${adjustColor(nodeColor, -20)}40`,
+        ...getAnimationStyles()
       }}
       onClick={() => selectNode(id)}
       onMouseEnter={() => setIsHovered(true)}

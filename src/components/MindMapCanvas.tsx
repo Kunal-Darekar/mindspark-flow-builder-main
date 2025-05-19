@@ -12,13 +12,14 @@ import {
   NodeTypes,
   Panel,
   ConnectionMode,
-  ReactFlowInstance
+  ReactFlowInstance,
+  MarkerType
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import useMindMapStore from '../store/mindMapStore';
 import MindNode from './MindNode';
 import { MindMapNode } from '../types/mindmap';
-import { Maximize, Minimize, Search, X, Sun, Moon } from 'lucide-react';
+import { Maximize, Minimize, Search, X, Sun, Moon, Grid3X3, Grid, Zap, Cpu } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const nodeTypes: NodeTypes = {
@@ -44,9 +45,18 @@ const MindMapCanvas = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [flowInstance, setFlowInstance] = useState<ReactFlowInstance | null>(null);
   const isMobile = useIsMobile();
+  const [snapToGrid, setSnapToGrid] = useState(false);
+  const [performanceMode, setPerformanceMode] = useState(false);
   
   // Track dark mode changes
   useEffect(() => {
+    // Set dark mode as default on initial load
+    if (!document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    setIsDarkMode(true);
+    
     const observer = new MutationObserver(() => {
       setIsDarkMode(document.documentElement.classList.contains('dark'));
     });
@@ -169,6 +179,7 @@ const MindMapCanvas = () => {
       const sourceNode = nodes.find(n => n.id === edge.source);
       const edgeColor = sourceNode?.data?.color || '#9b87f5';
       
+      // Enhanced enterprise-level edge styling
       return {
         ...edge,
         animated: isSelected || edge.animated,
@@ -178,10 +189,17 @@ const MindMapCanvas = () => {
           stroke: isSelected ? edgeColor : edgeStyle.stroke,
           strokeWidth: isSelected ? 2.5 : edgeStyle.strokeWidth,
           opacity: isSelected ? 1 : edgeStyle.opacity,
-        }
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 15,
+          height: 15,
+          color: isSelected ? edgeColor : edgeStyle.stroke,
+        },
+        type: performanceMode ? 'straight' : 'smoothstep'
       };
     });
-  }, [visibleNodes, edges, selectedNodeId, nodes, isDarkMode, customEdgeStyles]);
+  }, [visibleNodes, edges, selectedNodeId, nodes, isDarkMode, customEdgeStyles, performanceMode]);
   
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     // Handle node position changes
@@ -274,6 +292,8 @@ const MindMapCanvas = () => {
       maxZoom={2}
       defaultViewport={{ x: 0, y: 0, zoom: 1 }}
       fitView
+      snapToGrid={snapToGrid}
+      snapGrid={[15, 15]}
       connectionMode={ConnectionMode.Loose}
       proOptions={{ hideAttribution: true }}
       elementsSelectable={true}
@@ -441,6 +461,49 @@ const MindMapCanvas = () => {
               </button>
             </div>
           )}
+          
+          {/* Enterprise Controls */}
+          <div className={`flex items-center ${isDarkMode ? 'glass dark' : 'glass light'} rounded-full p-1 shadow-lg animate-fade-in-scale mr-2`}>
+            <button
+              onClick={() => setSnapToGrid(!snapToGrid)}
+              className={`p-2 rounded-full ${
+                isDarkMode 
+                  ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
+                  : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
+              } transition-colors relative`}
+              aria-label={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
+              title={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
+            >
+              {snapToGrid ? (
+                <Grid3X3 className="w-5 h-5 text-purple-400" />
+              ) : (
+                <Grid className="w-5 h-5" />
+              )}
+              {snapToGrid && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+              )}
+            </button>
+            
+            <button
+              onClick={() => setPerformanceMode(!performanceMode)}
+              className={`p-2 rounded-full ${
+                isDarkMode 
+                  ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
+                  : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
+              } transition-colors relative`}
+              aria-label={performanceMode ? "Disable performance mode" : "Enable performance mode"}
+              title={performanceMode ? "Disable performance mode" : "Enable performance mode"}
+            >
+              {performanceMode ? (
+                <Zap className="w-5 h-5 text-amber-400" />
+              ) : (
+                <Cpu className="w-5 h-5" />
+              )}
+              {performanceMode && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+              )}
+            </button>
+          </div>
           
           <button
             onClick={() => {
