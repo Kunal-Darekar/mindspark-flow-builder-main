@@ -89,7 +89,7 @@ The mind map is built using React Flow for node visualization and interaction. T
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/mindflow.git
+git clone https://github.com/Kunal-Darekar/mindspark-flow-builder-main
 
 # Install dependencies
 npm install
