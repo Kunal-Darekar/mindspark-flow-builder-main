@@ -21,7 +21,7 @@ MindFlow is an interactive mind map builder with auto-expanding nodes, created f
 
 ## 🚀 Live Demo
 
-Try it out: [MindFlow Demo](https://mindspark-flow-builder.vercel.app/)
+Try it out: [MindFlow Demo](https://mindspark-flow-builder.vercel.app/](https://mindspark-flow-builder-main.vercel.app/))
 
 ## 🛠️ Technology Stack
 
