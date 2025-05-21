@@ -10,6 +10,29 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from '@/hooks/use-toast';
 import TemplateSelector from './TemplateSelector';
 
+interface ExportButtonProps {
+  format: 'json' | 'png' | 'pdf';
+  icon: React.ReactNode;
+  onClick: (format: 'json' | 'png' | 'pdf') => void;
+  darkMode: boolean;
+}
+
+const ExportButton = ({ format, icon, onClick, darkMode }: ExportButtonProps) => (
+  <Button
+    size="sm"
+    variant="ghost"
+    onClick={() => onClick(format)}
+    className={`flex items-center justify-start pl-2 ${
+      darkMode 
+        ? 'hover:bg-white/10 text-white' 
+        : 'hover:bg-gray-100 text-gray-800'
+      }`}
+  >
+    {icon}
+    <span className="text-xs">{format.toUpperCase()}</span>
+  </Button>
+);
+
 interface ControlButtonProps {
   children: React.ReactNode;
   onClick: () => void;
@@ -245,24 +268,13 @@ const MindMapControls = () => {
             <div className="animate-shimmer w-5 h-5 rounded-full opacity-60 absolute left-[190px]"></div>
           </div>
           
-          {showTips && (
-            <button 
-              onClick={() => setShowTips(false)}
-              className="text-white/60 hover:text-white/90 transition-colors p-1.5 rounded-full hover:bg-white/10"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-          
-          {!showTips && (
-            <button 
-              onClick={() => setShowTips(true)}
-              title="View keyboard shortcuts"
-              className="text-white/60 hover:text-white/90 transition-colors p-1.5 rounded-full hover:bg-white/10"
-            >
-              <Info className="h-4 w-4" />
-            </button>
-          )}
+          <ControlButton 
+            onClick={() => setShowTips(!showTips)}
+            title={showTips ? "Hide keyboard shortcuts" : "View keyboard shortcuts"}
+            className="p-1.5 !bg-transparent"
+          >
+            {showTips ? <X className="h-4 w-4" /> : <Info className="h-4 w-4" />}
+          </ControlButton>
         </div>
         
         {/* Tips and shortcuts panel that slides down when shown */}
@@ -358,45 +370,24 @@ const MindMapControls = () => {
             } border w-full z-50 animate-slide-down overflow-hidden`}
         >
           <div className="flex flex-col gap-1.5">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleExport('json')}
-              className={`flex items-center justify-start pl-2 ${
-                darkMode 
-                  ? 'hover:bg-white/10 text-white' 
-                  : 'hover:bg-gray-100 text-gray-800'
-                }`}
-            >
-              <FileIcon className="h-4 w-4 mr-1.5" />
-              <span className="text-xs">JSON</span>
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleExport('png')}
-              className={`flex items-center justify-start pl-2 ${
-                darkMode 
-                  ? 'hover:bg-white/10 text-white' 
-                  : 'hover:bg-gray-100 text-gray-800'
-                }`}
-            >
-              <Image className="h-4 w-4 mr-1.5" />
-              <span className="text-xs">PNG</span>
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleExport('pdf')}
-              className={`flex items-center justify-start pl-2 ${
-                darkMode 
-                  ? 'hover:bg-white/10 text-white' 
-                  : 'hover:bg-gray-100 text-gray-800'
-                }`}
-            >
-              <FilePlus className="h-4 w-4 mr-1.5" />
-              <span className="text-xs">PDF</span>
-            </Button>
+            <ExportButton 
+              format="json"
+              icon={<FileIcon className="h-4 w-4 mr-1.5" />}
+              onClick={handleExport}
+              darkMode={darkMode}
+            />
+            <ExportButton 
+              format="png"
+              icon={<Image className="h-4 w-4 mr-1.5" />}
+              onClick={handleExport}
+              darkMode={darkMode}
+            />
+            <ExportButton 
+              format="pdf"
+              icon={<FilePlus className="h-4 w-4 mr-1.5" />}
+              onClick={handleExport}
+              darkMode={darkMode}
+            />
           </div>
         </div>
       )}

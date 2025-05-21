@@ -22,6 +22,46 @@ import { MindMapNode } from '../types/mindmap';
 import { Maximize, Minimize, Search, X, Sun, Moon, Grid3X3, Grid, Zap, Cpu } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Define types for the IconButton component
+interface IconButtonProps {
+  onClick: () => void;
+  icon: React.ReactNode;
+  isDarkMode: boolean;
+  ariaLabel: string;
+  title?: string;
+  className?: string;
+  hasIndicator?: boolean;
+  indicatorColor?: string;
+}
+
+// Create a reusable IconButton component
+const IconButton = ({ 
+  onClick, 
+  icon, 
+  isDarkMode, 
+  ariaLabel, 
+  title, 
+  className = "",
+  hasIndicator = false,
+  indicatorColor = "bg-purple-500"
+}: IconButtonProps) => (
+  <button
+    onClick={onClick}
+    className={`p-2 rounded-full ${
+      isDarkMode 
+        ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
+        : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
+    } transition-colors relative ${className}`}
+    aria-label={ariaLabel}
+    title={title}
+  >
+    {icon}
+    {hasIndicator && (
+      <span className={`absolute -top-1 -right-1 w-2 h-2 ${indicatorColor} rounded-full animate-pulse`}></span>
+    )}
+  </button>
+);
+
 const nodeTypes: NodeTypes = {
   mindNode: MindNode,
 };
@@ -373,17 +413,13 @@ const MindMapCanvas = () => {
               </span>
             </p>
             
-            <button
+            <IconButton
               onClick={() => setSearchQuery('')}
-              className={`p-1 rounded-full ${
-                isDarkMode 
-                  ? 'hover:bg-white/10 text-white/70' 
-                  : 'hover:bg-gray-100 text-gray-500'
-              } transition-colors`}
-              aria-label="Clear search"
-            >
-              <X className="h-4 w-4" />
-            </button>
+              icon={<X className="h-4 w-4" />}
+              isDarkMode={isDarkMode}
+              ariaLabel="Clear search"
+              className="p-1"
+            />
           </div>
         </Panel>
       )}
@@ -395,31 +431,21 @@ const MindMapCanvas = () => {
               ? 'bg-gray-900/90 border-white/20' 
               : 'bg-white/90 border-gray-200'
           } backdrop-blur-md shadow-lg border`}>
-            <button
+            <IconButton
               onClick={fitView}
-              className={`p-2 rounded-full ${
-                isDarkMode 
-                  ? 'hover:bg-white/10 active:bg-white/20' 
-                  : 'hover:bg-gray-100 active:bg-gray-200'
-              } transition-colors`}
-              aria-label="Fit view"
-            >
-              <Maximize className={`h-5 w-5 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`} />
-            </button>
-            <button
+              icon={<Maximize className={`h-5 w-5 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`} />}
+              isDarkMode={isDarkMode}
+              ariaLabel="Fit view"
+            />
+            <IconButton
               onClick={toggleFullscreen}
-              className={`p-2 rounded-full ${
-                isDarkMode 
-                  ? 'hover:bg-white/10 active:bg-white/20' 
-                  : 'hover:bg-gray-100 active:bg-gray-200'
-              } transition-colors`}
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            >
-              {isFullscreen ? 
+              icon={isFullscreen ? 
                 <Minimize className={`h-5 w-5 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`} /> : 
                 <Maximize className={`h-5 w-5 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`} />
               }
-            </button>
+              isDarkMode={isDarkMode}
+              ariaLabel={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            />
           </div>
         </Panel>
       )}
@@ -427,85 +453,36 @@ const MindMapCanvas = () => {
       {/* Dark Mode Toggle - Bottom Right */}
       <Panel position="bottom-right" className="mb-4 mr-4">
         <div className="flex items-center gap-2">
-          {isMobile && (
-            <div className={`flex items-center ${isDarkMode ? 'glass dark' : 'glass light'} rounded-full p-1 shadow-lg animate-fade-in-scale`}>
-              <button
-                onClick={() => {
-                  const rf = reactFlowInstance;
-                  if (rf) {
-                    const zoom = rf.getZoom();
-                    rf.zoomTo(Math.max(0.2, zoom - 0.2), { duration: 300 });
-                  }
-                }}
-                className={`p-2 rounded-full ${
-                  isDarkMode 
-                    ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
-                    : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
-                } transition-colors`}
-                aria-label="Zoom out"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-              <button
-                onClick={fitView}
-                className={`p-2 rounded-full ${
-                  isDarkMode 
-                    ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
-                    : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
-                } transition-colors`}
-                aria-label="Fit view"
-              >
-                <Maximize className="w-5 h-5" />
-              </button>
-            </div>
-          )}
-          
           {/* Enterprise Controls */}
           <div className={`flex items-center ${isDarkMode ? 'glass dark' : 'glass light'} rounded-full p-1 shadow-lg animate-fade-in-scale mr-2`}>
-            <button
+            <IconButton
               onClick={() => setSnapToGrid(!snapToGrid)}
-              className={`p-2 rounded-full ${
-                isDarkMode 
-                  ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
-                  : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
-              } transition-colors relative`}
-              aria-label={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
-              title={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
-            >
-              {snapToGrid ? (
-                <Grid3X3 className="w-5 h-5 text-purple-400" />
-              ) : (
+              icon={snapToGrid ? 
+                <Grid3X3 className="w-5 h-5 text-purple-400" /> : 
                 <Grid className="w-5 h-5" />
-              )}
-              {snapToGrid && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
-              )}
-            </button>
+              }
+              isDarkMode={isDarkMode}
+              ariaLabel={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
+              title={snapToGrid ? "Disable grid snapping" : "Enable grid snapping"}
+              hasIndicator={snapToGrid}
+              indicatorColor="bg-purple-500"
+            />
             
-            <button
+            <IconButton
               onClick={() => setPerformanceMode(!performanceMode)}
-              className={`p-2 rounded-full ${
-                isDarkMode 
-                  ? 'hover:bg-white/10 active:bg-white/20 text-white/80' 
-                  : 'hover:bg-gray-100 active:bg-gray-200 text-gray-700'
-              } transition-colors relative`}
-              aria-label={performanceMode ? "Disable performance mode" : "Enable performance mode"}
-              title={performanceMode ? "Disable performance mode" : "Enable performance mode"}
-            >
-              {performanceMode ? (
-                <Zap className="w-5 h-5 text-amber-400" />
-              ) : (
+              icon={performanceMode ? 
+                <Zap className="w-5 h-5 text-amber-400" /> : 
                 <Cpu className="w-5 h-5" />
-              )}
-              {performanceMode && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-              )}
-            </button>
+              }
+              isDarkMode={isDarkMode}
+              ariaLabel={performanceMode ? "Disable performance mode" : "Enable performance mode"}
+              title={performanceMode ? "Disable performance mode" : "Enable performance mode"}
+              hasIndicator={performanceMode}
+              indicatorColor="bg-amber-500"
+            />
           </div>
           
-          <button
+          <IconButton
             onClick={() => {
               const newDarkMode = !isDarkMode;
               if (newDarkMode) {
@@ -515,19 +492,18 @@ const MindMapCanvas = () => {
               }
               setIsDarkMode(newDarkMode);
             }}
-            className={`p-3 rounded-full transition-all shadow-lg ${
+            icon={isDarkMode ? 
+              <Sun className="w-5 h-5 animate-pulse-slow text-yellow-300" /> : 
+              <Moon className="w-5 h-5" />
+            }
+            isDarkMode={isDarkMode}
+            ariaLabel={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            className={`p-3 shadow-lg ${
               isDarkMode 
                 ? 'glass dark hover:bg-gray-800/90 animate-bounce-light' 
                 : 'glass light hover:bg-gray-50/90'
               } border`}
-            aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            {isDarkMode ? (
-              <Sun className="w-5 h-5 animate-pulse-slow text-yellow-300" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
+          />
         </div>
       </Panel>
     </ReactFlow>
